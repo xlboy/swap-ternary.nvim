@@ -1,5 +1,6 @@
 -- luacheck: globals vim
 
+local utils = require("swap-ternary.utils")
 --- @type NodeProcessor
 ---@diagnostic disable-next-line: missing-fields
 local M = {}
@@ -41,17 +42,11 @@ function M.get_target_nodes(ternary_node)
 end
 
 function M.recombination(target_nodes, buf)
-  local cond_start_line, cond_start_col, cond_end_line, cond_end_col = target_nodes.cond:range()
-  local cons_start_line, cons_start_col, cons_end_line, cons_end_col = target_nodes.cons:range()
-  local alt_start_line, alt_start_col, alt_end_line, alt_end_col = target_nodes.alt:range()
+  local cond_texts = utils.get_buf_texts_by_node(buf, target_nodes.cond)
+  local cons_texts = utils.get_buf_texts_by_node(buf, target_nodes.cons)
+  local alt_texts = utils.get_buf_texts_by_node(buf, target_nodes.alt)
 
-  local cond_text = vim.api.nvim_buf_get_text(buf, cond_start_line, cond_start_col, cond_end_line, cond_end_col, {})[1]
-  local cons_text = vim.api.nvim_buf_get_text(buf, cons_start_line, cons_start_col, cons_end_line, cons_end_col, {})[1]
-  local alt_text = vim.api.nvim_buf_get_text(buf, alt_start_line, alt_start_col, alt_end_line, alt_end_col, {})[1]
-
-  local result = cond_text .. " ? " .. alt_text .. " : " .. cons_text
-
-  return result
+  return utils.merge_texts({ cond_texts, { " ? " }, alt_texts, { " : " }, cons_texts })
 end
 
 return M

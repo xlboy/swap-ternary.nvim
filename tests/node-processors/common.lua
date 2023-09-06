@@ -1,25 +1,21 @@
 --- @class NodeInfo
 --- @field range { integer, integer, integer, integer }
---- @field text string
+--- @field texts string[]
 
 --- @class TestSource
 --- @field file_type "javascript" | "javascriptreact" | "typescript" | "typescriptreact"
 --- @field code string
 --- @field ternary_node NodeInfo
 --- @field target_nodes { alt: NodeInfo, cond: NodeInfo, cons: NodeInfo }
---- @field recomposed_text string
+--- @field recomposed_texts string[]
+
+local get_buf_texts_by_node = require("swap-ternary.utils").get_buf_texts_by_node
 
 local M = {
   constants = { CURSOR_EMOJI = "✍" },
 }
 
 local utils = {
-  get_buf_text_by_node_range = function(buf, node)
-    local start_line, start_col, end_line, end_col = node:range()
-    local node_text = vim.api.nvim_buf_get_text(buf, start_line, start_col, end_line, end_col, {})[1]
-
-    return node_text
-  end,
   find_substr_pos = function(text, substr)
     -- Initialize line and column counters
     local line_num = 1
@@ -89,6 +85,7 @@ end
 ---@param test_sources TestSource[]
 function M.test_processor(processor, test_sources)
   for _, value in ipairs(test_sources) do
+    print("Testing " .. value.file_type .. " " .. value.code)
     local _, buf = init_test(value.code, value.file_type)
     local node_tree = vim.treesitter.get_parser(buf)
     local ternary_node = processor.find_ternary_node_at_cursor(node_tree)
@@ -96,7 +93,7 @@ function M.test_processor(processor, test_sources)
     -- #region ternary_node
     assert.is.truthy(ternary_node)
     assert.are.same({ ternary_node:range() }, value.ternary_node.range)
-    assert.are.equal(utils.get_buf_text_by_node_range(buf, ternary_node), value.ternary_node.text)
+    assert.are.same(get_buf_texts_by_node(buf, ternary_node), value.ternary_node.texts)
     -- #endregion ternary_node
 
     -- #region target_nodes
@@ -104,18 +101,18 @@ function M.test_processor(processor, test_sources)
 
     assert.is.truthy(target_nodes.alt)
     assert.are.same({ target_nodes.alt:range() }, value.target_nodes.alt.range)
-    assert.are.equal(utils.get_buf_text_by_node_range(buf, target_nodes.alt), value.target_nodes.alt.text)
+    assert.are.same(get_buf_texts_by_node(buf, target_nodes.alt), value.target_nodes.alt.texts)
 
     assert.is.truthy(target_nodes.cond)
     assert.are.same({ target_nodes.cond:range() }, value.target_nodes.cond.range)
-    assert.are.equal(utils.get_buf_text_by_node_range(buf, target_nodes.cond), value.target_nodes.cond.text)
+    assert.are.same(get_buf_texts_by_node(buf, target_nodes.cond), value.target_nodes.cond.texts)
 
     assert.is.truthy(target_nodes.cons)
     assert.are.same({ target_nodes.cons:range() }, value.target_nodes.cons.range)
-    assert.are.equal(utils.get_buf_text_by_node_range(buf, target_nodes.cons), value.target_nodes.cons.text)
+    assert.are.same(get_buf_texts_by_node(buf, target_nodes.cons), value.target_nodes.cons.texts)
     -- #endregion target_nodes
 
-    assert.are.equal(processor.recombination(target_nodes, buf), value.recomposed_text)
+    assert.are.same(processor.recombination(target_nodes, buf), value.recomposed_texts)
   end
 end
 

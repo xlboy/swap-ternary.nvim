@@ -41,10 +41,10 @@ function M.start()
     return vim.notify("[swap-ternary] `target_nodes` error", vim.log.levels.ERROR)
   end
 
-  local replaced_text = node_processor.recombination(target_nodes, current_buf)
+  local recomposed_texts = node_processor.recombination(target_nodes, current_buf)
   --- `t_n_s` = `ternary_node_start`, `t_n_e` = `ternary_node_end`
   local t_n_s_line, t_n_s_col, t_n_e_line, t_n_e_col = ternary_node:range()
-  vim.api.nvim_buf_set_text(current_buf, t_n_s_line, t_n_s_col, t_n_e_line, t_n_e_col, { replaced_text })
+  vim.api.nvim_buf_set_text(current_buf, t_n_s_line, t_n_s_col, t_n_e_line, t_n_e_col, recomposed_texts)
 end
 
 return M
