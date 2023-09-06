@@ -1,0 +1,4 @@
+vendor/plenary.nvim
+.history
+.nvim-history
+.tests
