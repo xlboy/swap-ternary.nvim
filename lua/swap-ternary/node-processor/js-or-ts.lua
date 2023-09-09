@@ -10,7 +10,7 @@ function M.find_ternary_node_at_cursor(node_tree)
   local cursor_line = cursor[1] - 1
   local cursor_col = cursor[2] - 1
 
-  local node = node_tree:named_node_for_range({ cursor_line, cursor_col, cursor_line, cursor_col })
+  local node = node_tree:named_node_for_range({ cursor_line, cursor_col, cursor_line, cursor_col + 1 })
   while node do
     if node:type() == "ternary_expression" then
       return node
