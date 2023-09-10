@@ -13,7 +13,7 @@
 
 local M = {}
 
-function M.start()
+function M.swap()
   require("swap-ternary.controller").start()
 end
 

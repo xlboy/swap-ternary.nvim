@@ -8,6 +8,9 @@ local file_type = {
   is_ts_or_js = function(type) --- @type FileTypeIsXXX
     return string.match(type, "typescript") or string.match(type, "javascript")
   end,
+  is_c_or_cpp = function (type)
+    return string.match(type, "cpp") or string.match(type,"c++") or string.match(type,"c")
+  end
 }
 
 ---@return NodeProcessor
@@ -16,6 +19,9 @@ local function get_node_processor(buf)
   if file_type.is_ts_or_js(_file_type) then
     return require("swap-ternary.node-processor.js-or-ts")
   end
+  if file_type.is_c_or_cpp(_file_type) then
+    return require("swap-ternary.node-processor.c-or-cpp")
+  end
 end
 
 function M.start()
@@ -23,7 +29,7 @@ function M.start()
 
   local node_tree = vim.treesitter.get_parser(current_buf)
   if not node_tree then
-    return vim.notify("[swap-ternary] Node tree is empty", vim.log.levels.ERROR)
+    return vim.notify("[swap-ternary] Node tree is empty or parser is missing for current buffer", vim.log.levels.ERROR)
   end
 
   local node_processor = get_node_processor(current_buf)

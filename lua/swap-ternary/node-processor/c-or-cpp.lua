@@ -6,7 +6,7 @@ local common = require("swap-ternary.node-processor.common")
 local M = {}
 
 function M.find_ternary_node_at_cursor(node_tree)
-  return common.find_node_at_cursor(node_tree, "ternary_expression")
+ return common.find_node_at_cursor(node_tree, "conditional_expression")
 end
 
 function M.get_target_nodes(node)
