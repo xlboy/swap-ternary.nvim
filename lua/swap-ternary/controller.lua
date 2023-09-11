@@ -24,7 +24,7 @@ local function get_node_processor(buf)
   end
 end
 
-function M.start()
+function M.swap()
   local current_buf = vim.api.nvim_get_current_buf()
 
   local node_tree = vim.treesitter.get_parser(current_buf)

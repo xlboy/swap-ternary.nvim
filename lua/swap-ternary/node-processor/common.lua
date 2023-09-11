@@ -1,17 +1,18 @@
 -- luacheck: globals vim
 
 local utils = require("swap-ternary.utils")
---- @type NodeProcessor
---- @diagnostic disable-next-line: missing-fields
+
 local M = {}
 
+--- Find the specified type of node at the current cursor position in an upward manner
+--- @param node_tree LanguageTree
+--- @param node_type string
+--- @return TSNode|nil
 function M.find_node_at_cursor(node_tree, node_type)
   local cursor = vim.api.nvim_win_get_cursor(0)
   local cursor_line = cursor[1] - 1
   local cursor_col = cursor[2] - 1
 
-  -- { start_line, start_col, end_line, end_col }
-  -- return: TSNode
   local node = node_tree:named_node_for_range({ cursor_line, cursor_col, cursor_line, cursor_col + 1 })
   while node do
     if node:type() == node_type then
@@ -21,12 +22,10 @@ function M.find_node_at_cursor(node_tree, node_type)
   end
 end
 
+---@param ternary_node TSNode
+---@return TargetNodes
 function M.get_target_nodes(ternary_node)
-  local target_nodes = {
-    cond = nil,
-    cons = nil,
-    alt = nil,
-  }
+  local target_nodes = { cond = nil, cons = nil, alt = nil }
 
   for c_node, c_node_name in ternary_node:iter_children() do
     if c_node_name == "condition" then
@@ -43,6 +42,9 @@ function M.get_target_nodes(ternary_node)
   return target_nodes
 end
 
+---@param target_nodes TargetNodes
+---@param buf integer
+---@return string[]
 function M.recombination(target_nodes, buf)
   local cond_texts = utils.get_buf_texts_by_node(buf, target_nodes.cond)
   local cons_texts = utils.get_buf_texts_by_node(buf, target_nodes.cons)

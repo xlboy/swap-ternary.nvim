@@ -14,7 +14,7 @@
 local M = {}
 
 function M.swap()
-  require("swap-ternary.controller").start()
+  require("swap-ternary.controller").swap()
 end
 
 return M

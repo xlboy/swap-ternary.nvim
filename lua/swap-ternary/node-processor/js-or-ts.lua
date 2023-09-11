@@ -9,8 +9,8 @@ function M.find_ternary_node_at_cursor(node_tree)
   return common.find_node_at_cursor(node_tree, "ternary_expression")
 end
 
-function M.get_target_nodes(node)
-  return common.get_target_nodes(node)
+function M.get_target_nodes(ternary_node)
+  return common.get_target_nodes(ternary_node)
 end
 
 function M.recombination(target_nodes, buf)

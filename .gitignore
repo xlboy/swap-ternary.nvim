@@ -2,3 +2,4 @@ vendor/plenary.nvim
 .history
 .nvim-history
 .tests
+.DS_Store
