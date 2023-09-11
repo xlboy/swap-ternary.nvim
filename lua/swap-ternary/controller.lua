@@ -19,6 +19,9 @@ local file_type = {
   is_c_sharp = function(type)
     return string.match(type, "cs")
   end,
+  is_dart = function(type)
+    return string.match(type, "dart")
+  end,
 }
 
 ---@return NodeProcessor
@@ -35,6 +38,12 @@ local function get_node_processor(buf)
   end
   if file_type.is_java(_file_type) then
     return require("swap-ternary.node-processor.java")
+  end
+  if file_type.is_c_sharp(_file_type) then
+    return require("swap-ternary.node-processor.c#")
+  end
+  if file_type.is_dart(_file_type) then
+    return require("swap-ternary.node-processor.dart")
   end
 end
 
