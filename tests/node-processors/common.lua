@@ -3,7 +3,7 @@
 --- @field texts string[]
 
 --- @class TestSource
---- @field file_type "javascript" | "javascriptreact" | "typescript" | "typescriptreact" | "c" | "cpp" | "python"
+--- @field file_type "javascript" | "javascriptreact" | "typescript" | "typescriptreact" | "c" | "cpp" | "python" | "java"
 --- @field code string
 --- @field ternary_node NodeInfo
 --- @field target_nodes { alt: NodeInfo, cond: NodeInfo, cons: NodeInfo }
@@ -99,10 +99,6 @@ function M.test_processor(processor, test_sources)
     -- #region target_nodes
     local target_nodes = processor.get_target_nodes(ternary_node)
 
-    assert.is.truthy(target_nodes.alt)
-    assert.are.same({ target_nodes.alt:range() }, value.target_nodes.alt.range)
-    assert.are.same(get_buf_texts_by_node(buf, target_nodes.alt), value.target_nodes.alt.texts)
-
     assert.is.truthy(target_nodes.cond)
     assert.are.same({ target_nodes.cond:range() }, value.target_nodes.cond.range)
     assert.are.same(get_buf_texts_by_node(buf, target_nodes.cond), value.target_nodes.cond.texts)
@@ -110,6 +106,11 @@ function M.test_processor(processor, test_sources)
     assert.is.truthy(target_nodes.cons)
     assert.are.same({ target_nodes.cons:range() }, value.target_nodes.cons.range)
     assert.are.same(get_buf_texts_by_node(buf, target_nodes.cons), value.target_nodes.cons.texts)
+
+    assert.is.truthy(target_nodes.alt)
+    assert.are.same({ target_nodes.alt:range() }, value.target_nodes.alt.range)
+    assert.are.same(get_buf_texts_by_node(buf, target_nodes.alt), value.target_nodes.alt.texts)
+
     -- #endregion target_nodes
 
     assert.are.same(processor.recombination(target_nodes, buf), value.recomposed_texts)
