@@ -38,6 +38,6 @@ end
 
 require("plenary.busted")
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "javascript", "typescript", "tsx", "c", "cpp", "python", "java" },
+  ensure_installed = { "javascript", "typescript", "tsx", "c", "cpp", "python", "java", "c_sharp" },
   sync_install = true,
 })

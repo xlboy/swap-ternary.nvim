@@ -2,15 +2,23 @@
 
 local M = {}
 
---- @alias FileTypeIsXXX fun(type: string): boolean
-
+--- @type table<string, fun(type: string): boolean>
 local file_type = {
-  is_ts_or_js = function(type) --- @type FileTypeIsXXX
+  is_ts_or_js = function(type)
     return string.match(type, "typescript") or string.match(type, "javascript")
   end,
-  is_c_or_cpp = function (type)
-    return string.match(type, "cpp") or string.match(type,"c++") or string.match(type,"c")
-  end
+  is_c_or_cpp = function(type)
+    return string.match(type, "cpp") or string.match(type, "c++") or string.match(type, "c")
+  end,
+  is_python = function(type)
+    return string.match(type, "python")
+  end,
+  is_java = function(type)
+    return string.match(type, "java")
+  end,
+  is_c_sharp = function(type)
+    return string.match(type, "cs")
+  end,
 }
 
 ---@return NodeProcessor
@@ -21,6 +29,12 @@ local function get_node_processor(buf)
   end
   if file_type.is_c_or_cpp(_file_type) then
     return require("swap-ternary.node-processor.c-or-cpp")
+  end
+  if file_type.is_python(_file_type) then
+    return require("swap-ternary.node-processor.python")
+  end
+  if file_type.is_java(_file_type) then
+    return require("swap-ternary.node-processor.java")
   end
 end
 
