@@ -3,7 +3,7 @@
 --- @field texts string[]
 
 --- @class TestSource
---- @field file_type "javascript" | "javascriptreact" | "typescript" | "typescriptreact" | "c" | "cpp" | "python" | "java" | "cs" | "dart" | "swift"
+--- @field file_type "javascript" | "javascriptreact" | "typescript" | "typescriptreact" | "c" | "cpp" | "python" | "java" | "cs" | "dart" | "swift" | "ruby"
 --- @field code string
 --- @field ternary_node NodeInfo
 --- @field target_nodes { alt: NodeInfo, cond: NodeInfo, cons: NodeInfo }

@@ -25,6 +25,9 @@ local file_type = {
   is_swift = function(type)
     return string.match(type, "swift")
   end,
+  is_ruby = function(type)
+    return string.match(type, "ruby")
+  end,
 }
 
 ---@return NodeProcessor
@@ -50,6 +53,9 @@ local function get_node_processor(buf)
   end
   if file_type.is_swift(_file_type) then
     return require("swap-ternary.node-processor.swift")
+  end
+  if file_type.is_ruby(_file_type) then
+    return require("swap-ternary.node-processor.ruby")
   end
 end
 
