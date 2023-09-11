@@ -12,6 +12,7 @@ https://github.com/xlboy/swap-ternary.nvim/assets/63690944/2324c998-3e18-4989-90
 - `typescriptreact`
 - `c`
 - `cpp`
+- `python`
 
 ## Install
 
